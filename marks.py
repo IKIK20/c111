@@ -1,0 +1,36 @@
+import pandas as pd
+import plotly.figure_factory as ff
+import statistics as st
+import plotly.graph_objects as go
+
+df= pd.read_csv("studentMarks.csv")
+data= df["Math_score"].tolist()
+
+mean=st.mean(data)
+std= st.stdev(data)  
+#print(mean,std)
+
+#fig= ff.create_distplot([data],["scores"],show_hist= False)
+#fig.show()
+
+first_stdev_start, first_stdev_end = mean - std, mean + std
+second_stdev_start, second_stdev_end = mean - (2*std), mean + (2*std)
+third_stdev_start, third_stdev_end = mean - (3*std), mean + (3*std)
+
+
+df1= pd.read_csv("data3.csv")
+data1= df1["Math_score"].tolist()
+
+mean1= st.mean(data1)
+std1= st.stdev(data1)
+print (mean1,std1)
+
+fig= ff.create_distplot([data1],["scores1"],show_hist=False)
+fig.add_trace(go.Scatter(x=[mean,mean], y=[0,0.04], mode= "lines", name= "mean"))
+fig.add_trace(go.Scatter(x=[mean1,mean1], y=[0,0.04], mode= "lines", name= "mean of sample 1"))
+
+fig.add_trace(go.Scatter(x=[first_stdev_end,first_stdev_end], y=[0,0.04], mode= "lines", name= "stdev 1 end"))
+fig.add_trace(go.Scatter(x=[second_stdev_end,second_stdev_end], y=[0,0.04], mode= "lines", name= "stdev 2 end"))
+fig.add_trace(go.Scatter(x=[third_stdev_end,third_stdev_end], y=[0,0.04], mode= "lines", name= "stdev 3 end"))
+
+fig.show()
